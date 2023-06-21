@@ -757,6 +757,9 @@ def data_analysis_app() -> None:
         None.
 
     """
+
+    st.title('Data Analysis App :chart_with_upwards_trend:')
+    
     download_count = initialize_download_count()
 
     df = upload_file()
