@@ -1,17 +1,17 @@
-# Data Analysis App
+# Data Analysis App :a:
 
 This is a Streamlit-based data analysis app that allows users to upload a CSV or Excel file, perform basic data investigation, clean the data, and generate a data profiling report. The app provides various functionalities for data preprocessing, visualization, and exporting the cleaned dataset.
 
 ## Table of Contents
 
-1. Description
-2. Features
-3. Installation
-4. Usage
-5. Examples
-6. Use Cases
-7. Contributing
-8. License
+1. [Description](https://github.com/soopertramp/AnalytiXx_app#description)
+2. [Features](https://github.com/soopertramp/AnalytiXx_app#table-of-contents)
+3. [Installation](https://github.com/soopertramp/AnalytiXx_app#installation)
+4. [Usage](https://github.com/soopertramp/AnalytiXx_app#usage)
+5. [Examples](https://github.com/soopertramp/AnalytiXx_app#examples)
+6. [Use Cases](https://github.com/soopertramp/AnalytiXx_app#use-cases)
+7. [Contributing](https://github.com/soopertramp/AnalytiXx_app#contributing)
+8. [License](https://github.com/soopertramp/AnalytiXx_app#license)
 
 ## Description
 The Data Analysis App is a Streamlit application designed to simplify the data analysis process. It provides a user-friendly interface for uploading datasets, investigating the data, cleaning it, and generating a detailed data profiling report. The app aims to streamline the data analysis workflow and enable users to gain insights from their datasets quickly.
@@ -82,7 +82,7 @@ Dataset Preprocessing: Use the app to preprocess the dataset by converting data 
 
 Download Count Tracking: Track the number of times the cleaned dataset has been downloaded to monitor its popularity and usage.
 
-## Use Cases
+## Other Use Cases
 
 - Data Preprocessing: Use the app to preprocess the dataset by performing tasks such as scaling numerical features, handling categorical variables, normalizing data, or applying feature engineering techniques.
 
