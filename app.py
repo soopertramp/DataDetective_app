@@ -72,7 +72,7 @@ def upload_file() -> pd.DataFrame:
         pd.DataFrame: The uploaded DataFrame.
     """
 
-    st.subheader('Upload a CSV or Excel file to generate a data profiling report.')
+    st.subheader('Upload a CSV or Excel file to analyze.')
 
     # Create a file uploader widget
     uploaded_file = st.file_uploader("### Upload a file", type=["csv", "xlsx"])
