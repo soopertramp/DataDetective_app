@@ -1,4 +1,4 @@
-# Data Analysis App :a:
+# Data Analysis App :chart_with_upwards_trend:
 
 This is a Streamlit-based data analysis app that allows users to upload a CSV or Excel file, perform basic data investigation, clean the data, and generate a data profiling report. The app provides various functionalities for data preprocessing, visualization, and exporting the cleaned dataset.
 
