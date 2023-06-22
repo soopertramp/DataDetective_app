@@ -179,7 +179,7 @@ def apply_data_cleaning(df):
         date_columns = st.multiselect('Columns to convert to datetime', columns, key='convert_to_datetime_multiselect')
         for column in date_columns:
             df[column] = pd.to_datetime(df[column])
-        return df
+        return df 
     
     def handle_missing_values(df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -299,7 +299,7 @@ def apply_data_cleaning(df):
         st.write('###### 1. "Box Plot": Using the interquartile range (IQR) method, outliers are identified and removed from the dataset. Values outside the lower and upper bounds, calculated using the IQR and a multiplier, are considered outliers and filtered out.')
         st.write('###### 2. "Standard Deviation": You can specify the number of standard deviations from the mean as a threshold. Values outside this range are considered outliers and filtered out from the dataset.')
         st.write('###### 3. "Z Score": You can specify a threshold value for the Z score. Values with Z scores exceeding this threshold are considered outliers and removed from the dataset. The Z score measures how many standard deviations a value is away from the mean.')
-        remove_outliers = st.selectbox('Remove outliers', ['Box Plot', 'Standard Deviation', 'Z Score'])
+        remove_outliers = st.selectbox('Remove outliers', ['Do Nothing', 'Box Plot', 'Standard Deviation', 'Z Score'])
         num_columns = df.select_dtypes(include=['number']).columns
         
         if len(num_columns) > 0:
