@@ -32,7 +32,6 @@ def data_analysis_app() -> None:
     st.title('Data Analysis App :chart_with_upwards_trend:')
     
     download_count = initialize_download_count()
-    download_count = increment_download_count()
 
     df = upload_file()
     basic_investigation(df)
@@ -42,6 +41,8 @@ def data_analysis_app() -> None:
     plot_data(cleaned_df)
         
     generate_report(cleaned_df)
+    
+    download_count = increment_download_count()
     
     # Display the download count
     display_download_count(download_count)  
