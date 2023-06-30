@@ -16,6 +16,9 @@ Welcome to DataDetective, your personal data analysis assistant! DataDetective i
 6. [Examples](https://github.com/soopertramp/DataDetective_app#examples)
 7. [Contributing](https://github.com/soopertramp/DataDetective_app#contributing)
 8. [License](https://github.com/soopertramp/DataDetective_app#license)
+9. [Acknowledgments](https://github.com/soopertramp/DataDetective_app#acknowledgments)
+10. [Contact](https://github.com/soopertramp/DataDetective_app#contact)
+11. [Credits](https://github.com/soopertramp/DataDetective_app#credits)
 
 ## Description
 The Data Analysis App is a Streamlit application designed to simplify the data analysis process. It provides a user-friendly interface for uploading datasets, investigating the data, cleaning it, and generate and download the plots you created. The app aims to streamline the data analysis workflow and enable users to gain insights from their datasets quickly.
@@ -138,7 +141,7 @@ Special thanks to the Streamlit library for providing a powerful framework for b
 
 ## Contact
 
-If you have any questions, suggestions, or feedback regarding DataDetective, feel free to reach out to us at your-email@example.com. We value your input and are always happy to assist you!
+If you have any questions, suggestions, or feedback regarding DataDetective, feel free to reach out to us at pradeepchandrareddy95@gmail.com.
 
 ## Credits
 
