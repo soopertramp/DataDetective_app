@@ -11,11 +11,11 @@ Welcome to DataDetective, your personal data analysis assistant! DataDetective i
    - [Data Cleaning](https://github.com/soopertramp/DataDetective_app#data-cleaning)
    - [Data Analysis](https://github.com/soopertramp/DataDetective_app#data-analysis)
    - [Downloading Results](https://github.com/soopertramp/DataDetective_app#downloading-results)
-4. [Installation](https://github.com/soopertramp/AnalytiXx_app#installation)
-5. [Usage](https://github.com/soopertramp/AnalytiXx_app#usage)
-6. [Examples](https://github.com/soopertramp/AnalytiXx_app#examples)
-7. [Contributing](https://github.com/soopertramp/AnalytiXx_app#contributing)
-8. [License](https://github.com/soopertramp/AnalytiXx_app#license)
+4. [Installation](https://github.com/soopertramp/DataDetective_app#installation)
+5. [Usage](https://github.com/soopertramp/DataDetective_app#usage)
+6. [Examples](https://github.com/soopertramp/DataDetective_app#examples)
+7. [Contributing](https://github.com/soopertramp/DataDetective_app#contributing)
+8. [License](https://github.com/soopertramp/DataDetective_app#license)
 
 ## Description
 The Data Analysis App is a Streamlit application designed to simplify the data analysis process. It provides a user-friendly interface for uploading datasets, investigating the data, cleaning it, and generate and download the plots you created. The app aims to streamline the data analysis workflow and enable users to gain insights from their datasets quickly.
@@ -126,7 +126,24 @@ Here are a few examples to demonstrate how you can utilize DataDetective:
 -  Analyze the cleaned dataset to calculate key financial ratios, visualize trends in revenue and expenses, and identify anomalies.
 
 ## Contributing
-Contributions to the Data Analysis App are welcome! If you encounter any issues, have suggestions for improvements, or would like to add new features, please feel free to open an issue or submit a pull request. Contributions that improve the functionality, usability, or documentation of the app are highly appreciated.
+Contributions to DataDetective are welcome! If you have any bug fixes, improvements, or new features to add, please open an issue or submit a pull request on the GitHub repository.
 
 ## License
-The Data Analysis App is open source and is available under the MIT License. Feel free to modify and use the code for your own projects but don't forget to give the credit :knife:
+The Data Analysis App is open source and is available under the MIT License. Feel free to modify and use the code for your own projects.
+
+## Acknowledgments
+
+DataDetective was inspired by the need for a user-friendly data analysis tool that simplifies the process of data investigation, cleaning, and analysis.
+Special thanks to the Streamlit library for providing a powerful framework for building interactive data applications.
+
+## Contact
+
+If you have any questions, suggestions, or feedback regarding DataDetective, feel free to reach out to us at your-email@example.com. We value your input and are always happy to assist you!
+
+## Credits
+
+DataDetective was developed by [Pradeepchandra Reddy S C](https://www.linkedin.com/in/pradeepchandra-reddy-s-c/).
+
+## Changelog
+
+Document the version history and changes made to DataDetective in the Changelog section.
