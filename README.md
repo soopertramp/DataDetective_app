@@ -14,9 +14,8 @@ Welcome to DataDetective, your personal data analysis assistant! DataDetective i
 4. [Installation](https://github.com/soopertramp/AnalytiXx_app#installation)
 5. [Usage](https://github.com/soopertramp/AnalytiXx_app#usage)
 6. [Examples](https://github.com/soopertramp/AnalytiXx_app#examples)
-7. [Use Cases](https://github.com/soopertramp/AnalytiXx_app#use-cases)
-8. [Contributing](https://github.com/soopertramp/AnalytiXx_app#contributing)
-9. [License](https://github.com/soopertramp/AnalytiXx_app#license)
+7. [Contributing](https://github.com/soopertramp/AnalytiXx_app#contributing)
+8. [License](https://github.com/soopertramp/AnalytiXx_app#license)
 
 ## Description
 The Data Analysis App is a Streamlit application designed to simplify the data analysis process. It provides a user-friendly interface for uploading datasets, investigating the data, cleaning it, and generate and download the plots you created. The app aims to streamline the data analysis workflow and enable users to gain insights from their datasets quickly.
@@ -84,7 +83,7 @@ To run the Data Analysis App locally, follow these steps:
 
 ```streamlit run app.py ```
 
-### [Check out the app here](https://analytics.streamlit.app/)
+### [Check out the app here](https://datadetective.streamlit.app/)
 
 ## Usage
 
