@@ -7,8 +7,6 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from sklearn.impute import KNNImputer, SimpleImputer
-from streamlit_pandas_profiling import st_profile_report
-from ydata_profiling import ProfileReport
 
 import streamlit as st
 
@@ -93,7 +91,9 @@ def upload_file() -> pd.DataFrame:
             df = pd.read_excel(uploaded_file, sheet_name=selected_sheet)
         else:
             st.error("Invalid file format. Please upload a CSV or Excel file.")
+            return None
         
+        st.success("Your data is loaded successfully")
         return df  
                       
 def basic_investigation(df: pd.DataFrame):
@@ -134,15 +134,36 @@ def basic_investigation(df: pd.DataFrame):
         st.subheader('The data types of your columns')
         st.write(df.dtypes)
 
-    # Display missing values and duplicate values
-    if st.button('Show Missing Values and Duplicate Values', key='show_duplicates_before_cleaning'):
-        st.subheader('Missing Values and Duplicate Values In Your Dataset')
-        st.write(f"##### The DataFrame contains the following missing values.")
-        missing_values = df.isnull().sum()
-        missing_values_table = pd.DataFrame({'Column': missing_values.index, 'Missing Values': missing_values.values})
-        st.table(missing_values_table)
-        st.write(f'##### The number of duplicated rows in your dataset is {df.duplicated().sum()}')
-    
+    # Display the outliers
+    if st.button('Find Outliers', key='find_outliers'):
+        st.subheader('Outliers Detection Using IQR Method')
+
+        numeric_columns = df.select_dtypes(include=['int64', 'float64']).columns
+
+        outliers_summary = []
+
+        for column in numeric_columns:
+            q1 = df[column].quantile(0.25)
+            q3 = df[column].quantile(0.75)
+            iqr = q3 - q1
+            lower_bound = q1 - 1.5 * iqr
+            upper_bound = q3 + 1.5 * iqr
+
+            # Find outliers outside the bounds
+            outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+
+            outliers_summary.append({
+                'Column': column,
+                'Number of Outliers': len(outliers),
+                'Outliers': outliers
+            })
+
+        for outlier_info in outliers_summary:
+            st.write(f"##### Outliers in column '{outlier_info['Column']}':")
+            st.write(f"Number of outliers detected: {outlier_info['Number of Outliers']}")
+            if outlier_info['Number of Outliers'] > 0:
+                st.table(outlier_info['Outliers'])
+              
     # Display descriptive statistics
     if st.button('Show Descriptive Statistics', key='show_stats_before_cleaning'):
         st.write("###### This function calculates various statistical measures, including count, mean, standard deviation, minimum value, quartiles, and maximum value for each numerical column in the DataFrame.")
@@ -160,6 +181,9 @@ def apply_data_cleaning(df):
     Returns:
         pd.DataFrame: The cleaned DataFrame.
     """
+    if df is None:
+        st.error("Please Upload The Data, To See The Data Cleaning Inputs")
+        return None
     
     st.subheader('Data Cleaning Inputs')
     
@@ -489,7 +513,10 @@ def generate_download_link(df, file_name):
     Returns:
         None.
     """
-
+    if df is None:
+        st.error("Please Wait For The Data To Get Cleaned So That You Can Download")
+        return None
+    
     st.subheader('Download Your Cleaned Dataset')
 
     # Convert DataFrame to CSV file
@@ -499,7 +526,7 @@ def generate_download_link(df, file_name):
     b64 = base64.b64encode(csv.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="{file_name}.csv">Download CSV File</a>'
     st.markdown(href, unsafe_allow_html=True)   
-        
+                
 def plot_data(df):
     """
     Perform basic data visualization based on user-selected plot type.
@@ -561,21 +588,37 @@ def plot_data(df):
                 x_values = df[x_variable].map(category_dict)
                 y_values = df[y_variable]
 
-        plt.figure(figsize=(8, 6))
-        plt.scatter(x_values, y_values)
-        plt.xlabel(x_variable)
-        plt.ylabel(y_variable)
-        plt.title('Scatter Plot')
-        plt.tight_layout()
-        plt.xticks(rotation=45)
-        if df[x_variable].dtype == 'datetime64[ns]':
-            if selected_aggregation == 'Yearly':
+        # Download the plot
+        export_button = st.button(f'Generate and Download {selected_plot}')
+        if export_button:
+            # Save the plot as a file
+            fig, ax = plt.subplots(figsize=(8, 6))
+            ax.scatter(x_values, y_values)
+            ax.set_xlabel(x_variable)
+            ax.set_ylabel(y_variable)
+            ax.set_title('Scatter Plot')
+            plt.tight_layout()
+            plt.xticks(rotation=45)
+            if df[x_variable].dtype == 'datetime64[ns]':
+                if selected_aggregation == 'Yearly':
                     plt.xticks(x_values, x_values.astype(str))  # Format x-axis ticks as desired
-            elif selected_aggregation == 'Monthly':
+                elif selected_aggregation == 'Monthly':
                     plt.xticks(x_values, x_values.strftime('%Y-%m'))  # Format x-axis ticks as desired
-            elif selected_aggregation == 'Daily':
+                elif selected_aggregation == 'Daily':
                     plt.xticks(x_values, x_values.astype(str))  # Format x-axis ticks as desired
-        st.pyplot()
+
+            plt.savefig(f"{selected_plot}.png")
+            st.pyplot(fig)
+            
+            # Increment the download count
+            increment_download_count()
+            
+            # Provide a download link for the plot
+            with open(f"{selected_plot}.png", 'rb') as file:
+                b64 = base64.b64encode(file.read()).decode()  # Encode the file content in base64
+                href = f'<a href="data:image/png;base64,{b64}" download="{selected_plot}.png">Download {selected_plot}</a>'
+                st.markdown(href, unsafe_allow_html=True)
+                st.write(":arrow_up: Click Above To Download The Plot, Thank You! :pray:")
 
     elif selected_plot == 'Line Plot':
         st.write('###### Line Plot: ')
@@ -612,21 +655,36 @@ def plot_data(df):
                 x_values = df[x_variable].map(category_dict)
                 y_values = df[y_variable]
 
-        plt.figure(figsize=(12, 6))
-        plt.plot(x_values, y_values)
-        plt.xlabel(x_variable)
-        plt.ylabel(y_variable)
-        plt.title('Line Plot')
-        plt.tight_layout()
-        plt.xticks(rotation=45)
-        if df[x_variable].dtype == 'datetime64[ns]':
-            if selected_aggregation == 'Yearly':
-                plt.xticks(x_values, x_values.astype(str))  # Format x-axis ticks as desired
-            elif selected_aggregation == 'Monthly':
-                plt.xticks(x_values, x_values.strftime('%Y-%m'))  # Format x-axis ticks as desired
-            elif selected_aggregation == 'Daily':
-                plt.xticks(x_values, x_values.astype(str))  # Format x-axis ticks as desired
-        st.pyplot()
+        # Download the plot
+        export_button = st.button(f'Generate and Download {selected_plot}')
+        if export_button:
+            # Save the plot as a file
+            fig, ax = plt.subplots(figsize=(10, 6))
+            ax.plot(x_values, y_values)
+            ax.set_xlabel(x_variable)
+            ax.set_ylabel(y_variable)
+            ax.set_title('Line Plot')
+            plt.tight_layout()
+            plt.xticks(rotation=45)
+            if df[x_variable].dtype == 'datetime64[ns]':
+                if selected_aggregation == 'Yearly':
+                    plt.xticks(x_values, x_values.astype(str))  # Format x-axis ticks as desired
+                elif selected_aggregation == 'Monthly':
+                    plt.xticks(x_values, x_values.strftime('%Y-%m'))  # Format x-axis ticks as desired
+                elif selected_aggregation == 'Daily':
+                    plt.xticks(x_values, x_values.astype(str))  # Format x-axis ticks as desired
+
+            plt.savefig(f"{selected_plot}.png")
+            st.pyplot(fig)
+            
+            # Increment the download count
+            increment_download_count()
+
+            # Provide the file for download
+            with open(f"{selected_plot}.png", 'rb') as file:
+                b64 = base64.b64encode(file.read()).decode()  # Encode the file content in base64
+                href = f'<a href="data:image/png;base64,{b64}" download="{selected_plot}.png">Click here to download the {selected_plot}</a>'
+                st.markdown(href, unsafe_allow_html=True)
 
     elif selected_plot == 'Bar Plot':
         st.write('###### Bar Plot: ')
@@ -657,7 +715,8 @@ def plot_data(df):
         else:
             # Check if x_variable is a numerical column
             if np.issubdtype(df[x_variable].dtype, np.number):
-                x_values = df[x_variable]
+                bin_values = np.histogram(df[x_variable], bins='auto')[1]
+                x_values = pd.cut(df[x_variable], bins=bin_values, labels=False)
                 y_values = df[y_variable]
             else:
                 # Assign numerical values to categories
@@ -666,21 +725,36 @@ def plot_data(df):
                 x_values = df[x_variable].map(category_dict)
                 y_values = df[y_variable]
 
-        plt.figure(figsize=(8, 6))
-        plt.bar(x_values, y_values)
-        plt.xlabel(x_variable)
-        plt.ylabel(y_variable)
-        plt.title('Bar Plot')
-        plt.tight_layout()
-        plt.xticks(rotation=45)
-        if df[x_variable].dtype == 'datetime64[ns]':
-            if selected_aggregation == 'Yearly':
-                plt.xticks(x_values, x_values.astype(str))  # Format x-axis ticks as desired
-            elif selected_aggregation == 'Monthly':
-                plt.xticks(x_values, x_values.strftime('%Y-%m'))  # Format x-axis ticks as desired
-            elif selected_aggregation == 'Daily':
-                plt.xticks(x_values, x_values.astype(str))  # Format x-axis ticks as desired
-        st.pyplot()
+        # Download the plot
+        export_button = st.button(f'Generate and Download {selected_plot}')
+        if export_button:
+            # Save the plot as a file
+            fig, ax = plt.subplots(figsize=(8, 6))
+            ax.bar(x_values, y_values)
+            ax.set_xlabel(x_variable)
+            ax.set_ylabel(y_variable)
+            ax.set_title('Bar Plot')
+            plt.tight_layout()
+            plt.xticks(rotation=45)
+            if df[x_variable].dtype == 'datetime64[ns]':
+                if selected_aggregation == 'Yearly':
+                    plt.xticks(x_values, x_values.astype(str))  # Format x-axis ticks as desired
+                elif selected_aggregation == 'Monthly':
+                    plt.xticks(x_values, x_values.strftime('%Y-%m'))  # Format x-axis ticks as desired
+                elif selected_aggregation == 'Daily':
+                    plt.xticks(x_values, x_values.astype(str))  # Format x-axis ticks as desired
+
+            plt.savefig(f"{selected_plot}.png")
+            st.pyplot(fig)
+            
+            # Increment the download count
+            increment_download_count()
+
+            # Provide a download link for the plot
+            with open(f"{selected_plot}.png", 'rb') as file:
+                b64 = base64.b64encode(file.read()).decode()  # Encode the file content in base64
+                href = f'<a href="data:image/png;base64,{b64}" download="{selected_plot}.png">Click here to download the {selected_plot}</a>'
+                st.markdown(href, unsafe_allow_html=True)
 
     elif selected_plot == 'Histogram':
         st.write('###### Histogram: ')
@@ -690,18 +764,32 @@ def plot_data(df):
         st.subheader('Histogram')
         variable = st.selectbox('Select variable', df.columns)
 
-        # Check if variable is a numerical column
-        if np.issubdtype(df[variable].dtype, np.number):
-            plt.figure(figsize=(8, 6))
-            plt.hist(df[variable], bins='auto')
-            plt.xlabel(variable)
-            plt.ylabel('Frequency')
-            plt.title('Histogram')
-            plt.tight_layout()
-            plt.xticks(rotation=45)
-            st.pyplot()
-        else:
-            st.write('Selected variable is not numerical.')
+        # Download the plot
+        export_button = st.button(f'Generate and Download {selected_plot}')
+        if export_button:
+            # Save the plot as a file
+            # Check if variable is a numerical column
+            if np.issubdtype(df[variable].dtype, np.number):
+                fig, ax = plt.subplots(figsize=(8, 6))
+                ax.hist(df[variable], bins='auto')
+                ax.set_xlabel(variable)
+                ax.set_ylabel('Frequency')
+                ax.set_title('Histogram')
+                plt.tight_layout()
+                plt.xticks(rotation=45)
+                plt.savefig(f"{selected_plot}.png")
+                st.pyplot(fig)
+                
+                # Increment the download count
+                increment_download_count()
+                
+                # Provide a download link for the plot
+                with open(f"{selected_plot}.png", 'rb') as file:
+                    b64 = base64.b64encode(file.read()).decode()  # Encode the file content in base64
+                    href = f'<a href="data:image/png;base64,{b64}" download="{selected_plot}.png">Click here to download the {selected_plot}</a>'
+                    st.markdown(href, unsafe_allow_html=True)
+            else:
+                st.write('Selected variable is not numerical.')
 
     elif selected_plot == 'Box Plot':
         st.write('###### Box Plot: ')
@@ -712,14 +800,29 @@ def plot_data(df):
         x_variable = st.selectbox('Select x-axis variable', df.columns)
         y_variable = st.selectbox('Select y-axis variable', df.columns)
 
-        plt.figure(figsize=(8, 6))
-        sns.boxplot(x=x_variable, y=y_variable, data=df)
-        plt.xlabel(x_variable)
-        plt.ylabel(y_variable)
-        plt.title('Box Plot')
-        plt.tight_layout()
-        plt.xticks(rotation=45)
-        st.pyplot()
+        # Download the plot
+        export_button = st.button(f'Generate and Download {selected_plot}')
+        if export_button:
+            # Save the plot as a file
+            fig, ax = plt.subplots(figsize=(8, 6))
+            sns.boxplot(x=x_variable, y=y_variable, data=df)
+            plt.xlabel(x_variable)
+            plt.ylabel(y_variable)
+            plt.title('Box Plot')
+            plt.tight_layout()
+            plt.xticks(rotation=45)
+            plt.savefig(f"{selected_plot}.png")
+            
+            # Increment the download count
+            increment_download_count()
+
+            # Provide a download link for the plot
+            with open(f"{selected_plot}.png", 'rb') as file:
+                b64 = base64.b64encode(file.read()).decode()  # Encode the file content in base64
+                href = f'<a href="data:image/png;base64,{b64}" download="{selected_plot}.png">Click here to download the {selected_plot}</a>'
+                st.markdown(href, unsafe_allow_html=True)
+
+            st.pyplot(fig)
 
     elif selected_plot == 'Pie Plot':
         st.write('###### Pie Plot: ')
@@ -729,65 +832,36 @@ def plot_data(df):
         st.subheader('Pie Chart')
         variable = st.selectbox('Select variable', df.columns)
 
-        # Check if variable is a categorical column
-        if df[variable].dtype == 'object':
-            plt.figure(figsize=(8, 6))
-            plt.pie(df[variable].value_counts(), labels=df[variable].unique())
-            plt.title('Pie Chart')
-            plt.tight_layout()
-            plt.xticks(rotation=45)
-            st.pyplot()
-        else:
-            st.write('Selected variable is not categorical.')       
+        # Download the plot
+        export_button = st.button(f'Generate and Download {selected_plot}')
+        if export_button:
+            # Save the plot as a file
+            # Check if variable is a categorical column
+            if df[variable].dtype == 'object':
+                value_counts = df[variable].value_counts()
+                labels = value_counts.index
+                counts = value_counts.values
 
-def generate_report(df):
-    """
-    Generate a profiling report for the DataFrame and provide interactivity options for exporting the report.
+                fig, ax = plt.subplots(figsize=(8, 6))
+                ax.pie(counts, labels=labels)
+                ax.set_title('Pie Chart')
+                plt.tight_layout()
+                plt.xticks(rotation=45)
+                plt.savefig(f"{selected_plot}.png")
+                
+                # Increment the download count
+                increment_download_count()
 
-    Args:
-        df (pd.DataFrame): The cleaned DataFrame.
+                # Provide a download link for the plot
+                with open(f"{selected_plot}.png", 'rb') as file:
+                    b64 = base64.b64encode(file.read()).decode()  # Encode the file content in base64
+                    href = f'<a href="data:image/png;base64,{b64}" download="{selected_plot}.png">Click here to download the {selected_plot}</a>'
+                    st.markdown(href, unsafe_allow_html=True)
 
-    Returns:
-        None.
-    """
-
-    st.subheader('Do you need to generate the report?')
-    st.write('###### It generates a comprehensive report with various statistical metrics and visualizations to analyze the dataset.')
-    st.write('###### The report is typically used to gain insights into the data, identify data quality issues, and understand the distribution and relationships between variables.')
-    submit_button = st.button('Yes')
-    
-    # Generate the pandas profiling report
-    profile = ProfileReport(df, 
-                            title="Profiling Report", 
-                            explorative = True, 
-                            dark_mode = True,
-                            dataset={
-                            "description": "This app is created by - Pradeepchandra Reddy S C (a.k.a soopertramp07)",
-                            "copyright_holder": "soopertramp07",
-                            "copyright_year": "2023",
-                            "url": "https://www.linkedin.com/in/pradeepchandra-reddy-s-c/"})     
-
-    if submit_button:
-        # Display the profiling report using pandas_profiling
-        st_profile_report(profile)
-
-    st.subheader('Export Report')
-    export_button = st.button('Export Report as HTML')
-
-    if export_button:
-        profile.to_file("profiling_report.html")
-        st.success("Report exported successfully as HTML! ✅")
-
-        # Increment the download count
-        increment_download_count()
-
-        # Provide a download link for the exported report
-        with open("profiling_report.html", 'rb') as file:
-            b64 = base64.b64encode(file.read()).decode()  # Encode the file content in base64
-            href = f'<a href="data:text/html;base64,{b64}" download="data_analysis_report.html">Download The Report</a>'
-            st.markdown(href, unsafe_allow_html=True)
-            st.write(":arrow_up: Click Above To Download The Report, Thank You! :pray:")
-
+                st.pyplot(fig)
+            else:
+                st.write('Selected variable is not categorical.')      
+                
 # Display the download count
 def display_download_count(download_count: int) -> None:
     """
@@ -802,4 +876,4 @@ def display_download_count(download_count: int) -> None:
         None.
 
     """
-    st.write(f"Downloaders Count: {download_count}")
+    st.write(f"No of Plots Downloaded: {download_count}")
