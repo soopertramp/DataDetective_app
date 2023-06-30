@@ -97,7 +97,7 @@ DataDetective offers a set of data cleaning techniques to ensure your dataset is
 -  Transform The Data : Standardize or Normalize
 -  Convert The Column to Lowercase : This operation is useful when you want to ensure consistency in text data by converting all characters to lowercase.
 -  Convert Boolean Column to Binary : Converting boolean columns to binary representation can be useful when you want to work with numerical representations of boolean variables.
--  
+
 The cleaned dataset is displayed, highlighting the changes made during the cleaning process.
 
 #### Data Analysis
