@@ -146,7 +146,3 @@ If you have any questions, suggestions, or feedback regarding DataDetective, fee
 ## Credits
 
 DataDetective was developed by [Pradeepchandra Reddy S C](https://www.linkedin.com/in/pradeepchandra-reddy-s-c/).
-
-## Changelog
-
-Document the version history and changes made to DataDetective in the Changelog section.
