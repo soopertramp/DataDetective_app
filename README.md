@@ -18,59 +18,6 @@ The Data Analysis App is a Streamlit application designed to simplify the data a
 
 ## Features
 
-- `Upload CSV or Excel files`: Users can upload their datasets in either CSV or Excel format.
-
-- `Basic investigation`: Users can explore the dataset before cleaning the data, including viewing the entire dataset, top/bottom rows, shape, column types, missing values, and duplicate values.
-
-- `Data cleaning`: The app provides various data cleaning functions, such as handling missing values, removing duplicates, handling outliers, converting data types, converting to lowercase, and one-hot encoding categorical variables.
-
-- `Data visualization`: Users can visualize the dataset using various plots and charts to gain insights and identify patterns in the data. Also you can download the plots.
-
-- `Export cleaned dataset`: Users can download the cleaned dataset in CSV format.
-
-- `Download count`: The app keeps track of the number of times the cleaned dataset has been downloaded.
-
-## Installation
-To run the Data Analysis App locally, follow these steps:
-
-- Clone the repository:
-
-``` git clone https://github.com/soopertramp/DataDetective_app.git```
-
-- Navigate to the project directory:
-
-``` cd datadetective ```
-
-- Install the required dependencies:
-
-``` pip install -r requirements.txt ```
-
-- Run the app:
-
-```streamlit run app.py ```
-
-### [Check out the app here](https://analytics.streamlit.app/)
-
-## Usage
-
-- Launch the app by running the app.py script.
-
-- Upload a CSV or Excel file by clicking on the "Upload a file" button.
-
-- Perform basic investigation on the dataset to understand its structure and characteristics.
-
-- Apply data cleaning functions to preprocess the dataset according to your needs.
-
-- Visualize the data using the provided plotting functions to gain insights.
-
-- Download the plots.
-
-- Download the cleaned dataset by clicking on the "Download Cleaned Data" link.
-
-- View the download count to see how many times the cleaned dataset has been downloaded.
-
-## Features
-
 #### Uploading Data
 
 Click on the "Browse" button to select a CSV or Excel file from your local machine.
@@ -112,6 +59,45 @@ DataDetective provides various analysis tools and visualizations to help you gai
 
 #### Downloading Results
 DataDetective allows you to download the cleaned dataset after applying the necessary data cleaning operations. Additionally, you can download any generated analysis plots and summaries to save and share with others.
+
+## Installation
+To run the Data Analysis App locally, follow these steps:
+
+- Clone the repository:
+
+``` git clone https://github.com/soopertramp/DataDetective_app.git```
+
+- Navigate to the project directory:
+
+``` cd datadetective ```
+
+- Install the required dependencies:
+
+``` pip install -r requirements.txt ```
+
+- Run the app:
+
+```streamlit run app.py ```
+
+### [Check out the app here](https://analytics.streamlit.app/)
+
+## Usage
+
+- Launch the app by running the app.py script.
+
+- Upload a CSV or Excel file by clicking on the "Upload a file" button.
+
+- Perform basic investigation on the dataset to understand its structure and characteristics.
+
+- Apply data cleaning functions to preprocess the dataset according to your needs.
+
+- Visualize the data using the provided plotting functions to gain insights.
+
+- Download the plots.
+
+- Download the cleaned dataset by clicking on the "Download Cleaned Data" link.
+
+- View the download count to see how many times the cleaned dataset has been downloaded.
 
 ## Examples
 Here are a few examples to demonstrate how you can utilize DataDetective:
