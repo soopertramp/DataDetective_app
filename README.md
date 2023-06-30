@@ -113,9 +113,6 @@ DataDetective provides various analysis tools and visualizations to help you gai
 #### Downloading Results
 DataDetective allows you to download the cleaned dataset after applying the necessary data cleaning operations. Additionally, you can download any generated analysis plots and summaries to save and share with others.
 
-#### Interactive User Interface
-DataDetective's user-friendly interface makes it easy to navigate and interact with your data. You can switch between different sections, adjust settings, and visualize the impact of data cleaning operations in real-time.
-
 ## Examples
 Here are a few examples to demonstrate how you can utilize DataDetective:
 
