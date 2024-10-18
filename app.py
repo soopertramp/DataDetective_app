@@ -10,7 +10,7 @@ import streamlit as st
 st.set_page_config(page_title="Analyst", layout='wide')
 
 # Main app
-def data_analysis_app():
+def data_analysis_app(): 
     """
     Run the Data Analysis App.
 

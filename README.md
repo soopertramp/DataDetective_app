@@ -1,5 +1,7 @@
 # DataDetective App :detective:
 
+![Logo](1.jpeg)
+
 Welcome to DataDetective, your personal data analysis assistant! DataDetective is an interactive web application that allows you to upload, investigate, clean, and analyze your data with ease. Whether you are a data scientist, analyst, or just someone curious about exploring data, DataDetective is here to help you uncover valuable insights and make data-driven decisions.
 
 ## Table of Contents
